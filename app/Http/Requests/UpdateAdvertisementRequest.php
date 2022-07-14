@@ -25,6 +25,7 @@ class UpdateAdvertisementRequest extends FormRequest
     {
         return [ 
             'title' => 'required|max:200',
+            'price' => 'required',
             'description' => 'required|max:1000'
         ];
     }

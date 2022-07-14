@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Advertisement;
 use App\Http\Requests\StoreAdvertisementRequest;
 use App\Http\Requests\UpdateAdvertisementRequest;
-use Exception;
 
 class AdvertisementController extends Controller
 {
@@ -28,7 +27,13 @@ class AdvertisementController extends Controller
     public function store(StoreAdvertisementRequest $request)
     {
         try {
-            Advertisement::create($request->validated());
+            $advertisement = Advertisement::create($request->except('image_links'));
+
+            foreach($request->image_links as $link) {
+                $advertisement->imageLinks()->create([
+                    'link' => $link
+                ]);
+            } 
 
             return response(['message' => 'success'], 200);
         } catch (\Throwable $th) {
@@ -44,7 +49,7 @@ class AdvertisementController extends Controller
      */
     public function show(Advertisement $advertisement)
     {
-        return $advertisement;
+        return $advertisement->load('imageLinks');
     }
 
     /**

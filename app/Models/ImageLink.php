@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Advertisement extends Model
+class ImageLink extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
-
+    
     /**
-        * Get the image links for the advertisement.
+        * Get the advertisement that owns the image.
     */
-    public function imageLinks()
+    public function advertisement()
     {
-        return $this->hasMany(ImageLink::class);
+        return $this->belongsTo(Advertisement::class);
     }
 }

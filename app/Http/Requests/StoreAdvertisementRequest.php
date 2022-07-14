@@ -25,7 +25,9 @@ class StoreAdvertisementRequest extends FormRequest
     {
         return [ 
             'title' => 'required|max:200',
-            'description' => 'required|max:1000'
+            'description' => 'required|max:1000',
+            'price' => 'required',
+            "image_links" => 'required|array|min:1|max:3',
         ];
     }
 }
