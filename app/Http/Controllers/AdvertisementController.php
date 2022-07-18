@@ -5,17 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Advertisement;
 use App\Http\Requests\StoreAdvertisementRequest;
 use App\Http\Requests\UpdateAdvertisementRequest;
+use Illuminate\Http\Request;
 
 class AdvertisementController extends Controller
 {
+    const SORT_COLUMNS = array('price', 'created_at');
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Advertisement::simplePaginate(10);
+        $advertisements = Advertisement::with('imageLinks');
+        
+        if ($this->hasSortParams($request->sort_by_column)) 
+        {
+            $sortDirection = isset($request->sort_direction) ? $request->sort_direction : 'asc';
+
+            $advertisements->orderBy($request->sort_by_column, $sortDirection);
+        }
+
+
+        return $advertisements->paginate(1);
     }
 
     /**
@@ -35,9 +47,16 @@ class AdvertisementController extends Controller
                 ]);
             } 
 
-            return response(['message' => 'success'], 200);
+            return response([
+                'status_code' => 200, 
+                'message' => 'created',
+                'id' => $advertisement->id,
+            ], 200); 
         } catch (\Throwable $th) {
-            return response($th->getMessage(), 500);
+            return response([
+                'status_code' => 500,
+                'message' => $th->getMessage()
+            ], 500);
         }
     }
 
@@ -85,5 +104,13 @@ class AdvertisementController extends Controller
         } catch (\Throwable $th) {
             return response($th->getMessage(), 500);
         }
+    }
+
+    /**
+     * check if query has nessary parametrs for sorting
+     */
+    private function hasSortParams($sortByColumn)
+    {
+        return isset($sortByColumn) && in_array($sortByColumn, self::SORT_COLUMNS);
     }
 }
