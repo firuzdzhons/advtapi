@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Advertisement;
 use App\Http\Requests\StoreAdvertisementRequest;
 use App\Http\Requests\UpdateAdvertisementRequest;
+use App\Http\Resources\AdvertisementResource;
 use Illuminate\Http\Request;
 
 class AdvertisementController extends Controller
 {
     const SORT_COLUMNS = array('price', 'created_at');
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +19,7 @@ class AdvertisementController extends Controller
      */
     public function index(Request $request)
     {
-        $advertisements = Advertisement::with('imageLinks');
+        $advertisements = Advertisement::with('oldestImageLink');
         
         if ($this->hasSortParams($request->sort_by_column)) 
         {
@@ -26,8 +28,7 @@ class AdvertisementController extends Controller
             $advertisements->orderBy($request->sort_by_column, $sortDirection);
         }
 
-
-        return $advertisements->paginate(4);
+        return AdvertisementResource::collection($advertisements->paginate(10));
     }
 
     /**

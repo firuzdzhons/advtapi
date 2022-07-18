@@ -18,4 +18,12 @@ class Advertisement extends Model
     {
         return $this->hasMany(ImageLink::class);
     }
+
+    /**
+        * Get the main image link for the advertisement.
+    */
+    public function oldestImageLink()
+    {
+        return $this->hasOne(ImageLink::class)->latest();
+    }
 }
