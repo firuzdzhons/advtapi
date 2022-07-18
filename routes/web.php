@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Advertisement;
+use App\Models\ImageLink;
+use Database\Factories\ImageLinkFactory;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $advertisement = Advertisement::factory()->has(ImageLink::factory()->count(3))->count(3)->create();
+
+    return $advertisement;
 });

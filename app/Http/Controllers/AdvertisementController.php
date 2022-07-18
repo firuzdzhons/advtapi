@@ -27,7 +27,7 @@ class AdvertisementController extends Controller
         }
 
 
-        return $advertisements->paginate(1);
+        return $advertisements->paginate(4);
     }
 
     /**
