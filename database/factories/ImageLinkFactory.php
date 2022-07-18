@@ -16,7 +16,7 @@ class ImageLinkFactory extends Factory
     {
         return [
             'advertisement_id' => Advertisement::factory(),
-            'link' => $this->faker->sentence(),
+            'link' => 'https://icon-library.com/images/photo-placeholder-icon/photo-placeholder-icon-14.jpg'
         ];
     }
 }

@@ -15,6 +15,7 @@ class AdvertisementResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'price' => $this->price,
             'main_image' => $this->whenLoaded('oldestImageLink')->link
